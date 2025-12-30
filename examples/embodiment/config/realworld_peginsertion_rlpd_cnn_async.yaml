@@ -16,23 +16,23 @@ cluster:
   num_nodes: 2
   component_placement:
     actor: 
-      node_group: "4090"
+      node_group: "A100"
       placement: 0 # Local GPU rank in the 4090 node group (n for the n+1 th GPU)
     env:
       node_group: franka
       placement: 0 # Local robot rank in the franka node group (n for the n+1 th robot)
     rollout:
-      node_group: "4090"
+      node_group: "A100"
       placement: 0 # Local GPU rank in the 4090 node group (n for the n+1 th GPU)
   node_groups:
-    - label: "4090" # GPU node group
+    - label: "A100" # GPU node group
       node_ranks: 0 # The ranks of the nodes to be included in this group， change this if your training node is not rank 0
     - label: franka
       node_ranks: 1 # Change this if your robot node is not rank 1
       hardware:
         type: Franka
         configs:
-          - robot_ip: ROBOT_IP # Replace with your robot's IP address
+          - robot_ip: 127.16.0.2 # Replace with your robot's IP address
             node_rank: 1
 
 data:
@@ -121,7 +121,7 @@ rollout:
   pipeline_stage_num: 1
 
   model:
-    model_path: "/path/to/model"
+    model_path: "/DATA/disk1/yjb/projects/VLA/RLinf/model/RLinf-Reset10-pretrained"
     precision: ${actor.model.precision}
     num_q_heads: 10
 
@@ -135,7 +135,7 @@ actor:
   enable_offload: False
 
   model:
-    model_path: "/path/to/model"
+    model_path: "/DATA/disk1/yjb/projects/VLA/RLinf/model/RLinf-Reset10-pretrained"
     state_dim: 19
     action_dim: 6
 
