@@ -25,17 +25,40 @@ from rlinf.envs.realworld.franka.franka_controller import FrankaController
 
 
 def main():
-    robot_ip = os.environ.get("FRANKA_ROBOT_IP", None)
-    assert robot_ip is not None, "Please set the FRANKA_ROBOT_IP environment variable."
-    controller = FrankaController.launch_controller(robot_ip=robot_ip)
+    print("=" * 60)
+    print("DEBUG: Starting test_controller")
+    print("=" * 60)
 
+    robot_ip = os.environ.get("FRANKA_ROBOT_IP", None)
+    print(f"DEBUG: FRANKA_ROBOT_IP = {robot_ip}")
+
+    assert robot_ip is not None, "Please set the FRANKA_ROBOT_IP environment variable."
+
+    print(f"DEBUG: Launching controller with robot_ip={robot_ip}")
+    controller = FrankaController.launch_controller(robot_ip=robot_ip)
+    print("DEBUG: Controller launched successfully")
+
+    print("DEBUG: Waiting for robot to be ready...")
     start_time = time.time()
+    check_count = 0
     while not controller.is_robot_up().wait()[0]:
+        check_count += 1
+        elapsed = time.time() - start_time
+        print(f"DEBUG: Check #{check_count}, elapsed={elapsed:.1f}s - robot not ready yet")
         time.sleep(0.5)
-        if time.time() - start_time > 30:
+        if elapsed > 30:
             print(
-                f"Waited {time.time() - start_time} seconds for Franka robot to be ready."
+                f"WARNING: Waited {elapsed} seconds for Franka robot to be ready."
             )
+
+    print(f"DEBUG: Robot is ready! (took {time.time() - start_time:.1f}s)")
+    print("=" * 60)
+    print("Robot is ready. Available commands:")
+    print("  getpos       - Get current TCP pose (quaternion)")
+    print("  getpos_euler - Get current TCP pose (euler angles)")
+    print("  q            - Quit")
+    print("=" * 60)
+
     while True:
         try:
             cmd_str = input("Please input cmd:")
