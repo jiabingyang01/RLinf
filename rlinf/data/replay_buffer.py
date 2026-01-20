@@ -328,11 +328,16 @@ class SACReplayBuffer:
         return stats
 
     def split_to_dict(self, num_splits, is_sequential=False):
-        assert self.capacity % num_splits == 0
+        # assert self.capacity % num_splits == 0  # Commented out to handle non-divisible sizes
 
-        all_ids = torch.arange(self.size).to(self.device)
+        # Use the largest size that can be evenly split
+        usable_size = (self.size // num_splits) * num_splits
+        if usable_size < self.size:
+            print(f"Warning: Buffer size {self.size} is not divisible by {num_splits}. Using {usable_size} samples (discarding {self.size - usable_size} samples).")
+
+        all_ids = torch.arange(usable_size).to(self.device)
         if not is_sequential:
-            all_ids = torch.randperm(self.size, generator=self.random_generator).to(
+            all_ids = torch.randperm(usable_size, generator=self.random_generator).to(
                 self.device
             )
 

@@ -24,7 +24,7 @@ import numpy as np
 class CameraInfo:
     name: str
     serial_number: str
-    resolution: tuple[int, int] = (640, 480)
+    resolution: tuple[int, int] = (1280, 720)
     fps: int = 15
     enable_depth: bool = False
 

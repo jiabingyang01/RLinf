@@ -32,14 +32,14 @@ cluster:
       hardware:
         type: Franka
         configs:
-          - robot_ip: 127.16.0.2 # Replace with your robot's IP address
+          - robot_ip: 172.16.0.2 # Replace with your robot's IP address
             node_rank: 1
 
 data:
   type: robot_demo
   channel:
     name: demo_data
-  path: "/path/to/demo_data"
+  path: "/DATA/disk1/yjb/projects/VLA/RLinf/logs/demo_20260120-07:41:25/data.pkl"
 
 runner:
   task_type: embodied
@@ -111,7 +111,7 @@ env:
     override_cfg:
       is_dummy: False
       use_dense_reward: False
-      target_ee_pose: TARGET_EE_POSE # Replace with your target end-effector pose
+      target_ee_pose: [0.5589563617375458, -0.0952564942998196, 0.03587267452112963, -3.1149868647022414, 0.02262728342361431, -1.983894460535418] # Replace with your target end-effector pose
 
 rollout:
   group_name: "RolloutGroup"
@@ -129,7 +129,7 @@ actor:
   group_name: "ActorGroup"
   training_backend: "fsdp"
 
-  micro_batch_size: 1024
+  micro_batch_size: 128
   global_batch_size: 1024
   seed: 1234
   enable_offload: False

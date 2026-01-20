@@ -16,29 +16,29 @@ cluster:
   num_nodes: 2
   component_placement:
     actor: 
-      node_group: "4090"
-      placement: 0-0
+      node_group: "A100"
+      placement: 0-7
     env:
       node_group: franka
       placement: 0
     rollout:
-      node_group: "4090"
-      placement: 0-0
+      node_group: "A100"
+      placement: 0-7
   node_groups:
-    - label: "4090"
-      node_ranks: 0-0
+    - label: "A100"
+      node_ranks: 0
       env_configs:
-        - node_ranks: 0-0
+        - node_ranks: 0
           python_interpreter_path: /path/to/python
     - label: franka
-      node_ranks: 1-1
+      node_ranks: 1
       env_configs:
-        - node_ranks: 1-1
+        - node_ranks: 1
           python_interpreter_path: /path/to/python
       hardware:
         type: Franka
         configs:
-          - robot_ip: ROBOT_IP
+          - robot_ip: 172.16.0.2
             node_rank: 1
 
 runner:
@@ -121,7 +121,7 @@ rollout:
   pipeline_stage_num: 1
 
   model:
-    model_path: "/path/to/model"
+    model_path: "/DATA/disk1/yjb/projects/VLA/RLinf/model/RLinf-Reset10-pretrained"
     precision: ${actor.model.precision}
 
 actor:
@@ -134,7 +134,7 @@ actor:
   enable_offload: False
 
   model:
-    model_path: "/path/to/model"
+    model_path: "/DATA/disk1/yjb/projects/VLA/RLinf/model/RLinf-Reset10-pretrained"
     state_dim: 19
     action_dim: 6
 
